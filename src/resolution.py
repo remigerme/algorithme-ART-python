@@ -1,6 +1,7 @@
 from numpy import vdot, zeros, where
 from numpy.linalg import norm
 from random import randint
+from image import tronquer
 
 
 def prochain_rayon(j, N_R, aleatoire):
@@ -11,12 +12,6 @@ def prochain_rayon(j, N_R, aleatoire):
     while j == j_:
         j_ = randint(0, N_R - 1)
     return j_
-
-
-def tronquer(f):
-    # Pour avoir des valeurs dans [0, 1]
-    for i in range(len(f)):
-        f[i] = max(0, min(1, f[i]))
 
 
 def ART(f0, A, R, N_ITER, aleatoire, cst):

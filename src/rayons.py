@@ -1,13 +1,6 @@
-from numpy import array, zeros, linspace, cos, sin, tan, pi
+from numpy import zeros, linspace, cos, sin, tan, pi
+from image import indice_pixel
 
-
-# Pour les coordonnées de l'image dans le plan
-# on reprend les conventions de Pillow
-# (0, 0) en haut à gauche
-
-
-def indice_pixel(x: int, y: int, H):
-    return x * H + y
 
 def est_valide(x, y, L, H):
     return 0 <= x < L and 0 <= y < H
