@@ -1,4 +1,5 @@
-from numpy import sqrt, vdot, zeros
+from numpy import vdot, zeros, where
+from numpy.linalg import norm
 from random import randint
 
 
@@ -23,23 +24,18 @@ def ART(f0, A, R, N_ITER, aleatoire, cst):
     N_P = cst.L * cst.H # nombre de pixels
     # Les vecteurs normaux aux hyperplans sont les (lignes) A[j]
     # Il est pratique de les rendre unitaires
-    # On calcule la norme de chaque ligne
+    # On calcule la norme 1 de chaque ligne
     N = zeros((N_R, N_P))
+    normes = norm(A, ord = 1, axis = 1)
     for j in range(N_R):
-        norme_ligne = 0
-        for i in range(N_P):
-            norme_ligne += A[j][i] # ** 2
-        N[j] = A[j] / sqrt(norme_ligne)
+        N[j] = A[j] / normes[j]
     
     # On calcule aussi les projections orthogonales de 0 sur les hyperplans
     T = zeros((N_R, N_P))
     for j in range(N_R):
         # On prend h une solution particulière de A[j]h = R[j]
         # Pour ça on prend un coefficient non nul de A[j]
-        i0 = 0
-        while A[j][i0] == 0:
-            # Il existe i0 < N_R qui convient car un rayon passe forcément par un pixel
-            i0 += 1
+        i0 = where(A[j] > 1e-5)[0][0]
         h = zeros(N_P)
         h[i0] = R[j]
         T[j] = vdot(h, N[j]) * N[j]
