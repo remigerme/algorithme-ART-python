@@ -49,7 +49,8 @@ def image_depuis_fichier(fichier):
     N_R = L * H
     I = zeros(N_R, dtype = float)
     for k in range(N_R):
-        I[k] = im.getpixel(()) / 255    
+        x, y = coords_pixel(k, H)
+        I[k] = im.getpixel((x, y)) / 255    
     return (I, L, H)
 
 def enregistrer_image(f, L, H, fichier):
