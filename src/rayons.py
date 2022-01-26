@@ -80,9 +80,9 @@ def tracer_rayons(cst):
                     or (y < f_k < y + 1)
             # Initialisation
             pas_vus = [True] * N_P # pour ne pas boucler sur des pixels déjà visités
-            f_0 = rho / cos(theta)
             ((x, y), d) = trouver_premier_pixel(theta, rho, cst.L, cst.H)
             directions = Directions[d]
+            f_k = x * tan_theta + rho / cos(theta)
             ind = indice_pixel(x, y, cst.H)
             pas_vus[ind] = False
             A[cst.N_RHO * i + j][ind] = 1
@@ -98,5 +98,5 @@ def tracer_rayons(cst):
                         pas_vus[ind] = False
                         f_k_p = f_k if dx == 0 else f_k + tan_theta
                         prochain_pixel(x_, y_, f_k_p)
-            prochain_pixel(x, y, f_0)
+            prochain_pixel(x, y, f_k)
     return A
