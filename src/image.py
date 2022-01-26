@@ -1,4 +1,5 @@
 from numpy.random import rand
+from numpy.linalg import norm
 from numpy import zeros
 from PIL import Image
 
@@ -20,6 +21,9 @@ def tronquer(f):
     # Pour avoir des valeurs dans [0, 1]
     for i in range(len(f)):
         f[i] = max(0, min(1, f[i]))
+
+def ecart_moyen(f, g, N_P):
+    return norm(f - g, ord = 1) / N_P
 
 #                    #
 # GENERATION D'IMAGE #
@@ -50,7 +54,7 @@ def image_depuis_fichier(fichier):
     I = zeros(N_R, dtype = float)
     for k in range(N_R):
         x, y = coords_pixel(k, H)
-        I[k] = im.getpixel((x, y)) / 255    
+        I[k] = im.getpixel((x, y)) / 255   
     return (I, L, H)
 
 def enregistrer_image(f, L, H, fichier):
