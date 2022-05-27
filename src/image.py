@@ -25,6 +25,10 @@ def tronquer(f):
 def ecart_moyen(f, g, N_P):
     return norm(f - g, ord = 1) / N_P
 
+def ecart_norme_euc(f, g):
+    return norm(f - g, ord = 2)
+
+
 #                    #
 # GENERATION D'IMAGE #
 #                    #
