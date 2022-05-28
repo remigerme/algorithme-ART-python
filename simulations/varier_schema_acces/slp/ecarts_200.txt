@@ -1,0 +1,2 @@
+succ: moyen : 0.06638564928911556 - norme euclidienne : 28.000595713940307
+alea: moyen : 0.06651182052530889 - norme euclidienne : 28.011006827207204
