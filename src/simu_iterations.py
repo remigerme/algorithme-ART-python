@@ -110,12 +110,16 @@ def extraire_stats(fichier_ref, chemin, taille):
         if m_taille == taille:
             nom_fichier = chemin + "{}_{}_{}_{}.png".format(taille, m_n_t, m_n_r, m_n_iter)
             f, _, _ = image_depuis_fichier(nom_fichier)
-            ecarts[m_n_iter] = (ecart_moyen(I, f, L * H), ecart_norme_euc(I, f))
+            ecarts[m_n_iter] = (ecart_moyen(I, f, L * H), ecart_norme_euc(I, f), m_n_t * m_n_t)
 
     with open(chemin + "ecarts_{}.txt".format(taille), "w") as f:
         s = ""
         for (cle, val) in ecarts.items():
-            s += str(cle) + ": moyen : " + str(val[0]) + " - norme euclidienne : " + str(val[1])+ "\n"
+            s += str(cle) + ": moyen : " + str(val[0]) + " - norme euclidienne : " + str(val[1]) + " - rayons : " + str(val[2]) + "\n"
         f.write(s)
 
-extraire_stats("exemples/slp/slp_200.png", "simulations/varier_iterations/slp/", 200)
+for image in ["slp", "lapin"]:
+    for taille in [50, 100, 150, 200]:
+        fichier_ref = "exemples/{}/{}_{}.png".format(image, image, taille)
+        chemin = "simulations/varier_iterations/{}/".format(image)
+        extraire_stats(fichier_ref, chemin, taille)
