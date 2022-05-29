@@ -106,7 +106,40 @@ def plot_simu_nb_rayons(fichiers, labels, tailles):
     plt.legend(fontsize = 12)
     plt.show()
 
-chemin = "simulations/varier_nb_rayons/"
+
+def plot_simu_nb_rayons(fichiers, labels):
+    # Initialisation
+    fig, (ax1, ax2) = plt.subplots(2, 1)
+    
+    couleurs = ["#8C3C12", "#CF4D18", "#FF541D", "#124295", "#1A5FD8", "#1DADFF"]
+    if len(fichiers) > len(couleurs):
+        raise Exception("Pas assez de couleurs")
+
+    for (i, fichier) in enumerate(fichiers):
+        with open(fichier, "r") as f:
+            s = f.read()
+        re_absc= re.compile("(?P<n_iter>[0-9]+):")
+        re_moy = re.compile("moyen : (0\.[0-9]*)")
+        re_euc = re.compile("euclidienne : ([0-9]+\.[0-9]*)")
+        re_rayons = re.compile("rayons : (?P<nb_rayons>[0-9]+)")
+        nb_rayons = [int(m.group("nb_rayons")) for m in re_rayons.finditer(s)]
+        absc = [int(m.group("n_iter")) / nb_rayons[i] for m in re_absc.finditer(s)]
+        ords_moy = re_moy.findall(s)
+        ords_euc = re_euc.findall(s)
+        ords_moy = [float(s) for s in ords_moy]
+        ords_euc = [float(s) for s in ords_euc]
+        ax1.plot(absc, ords_moy, color=couleurs[i], label=labels[i])
+        ax2.plot(absc, ords_euc, color=couleurs[i], label=labels[i])
+
+    # Légende
+    fig.suptitle("Écart à l'image cible suivant le nombre d'itérations effectuées\nnombre de rayons \"optimal\", initialisation noire", fontsize = 16)
+    ax1.set_ylabel("Écart moyen", fontsize = 14)
+    ax2.set_ylabel("Écart en norme euclidienne", fontsize = 14)
+    ax1.set_xlabel("Nombre de cycles", fontsize = 14)
+    ax2.set_xlabel("Nombre de cycles", fontsize = 14)
+    plt.legend(fontsize = 12)
+    plt.show()
+
+chemin = "simulations/varier_iterations/"
 plot_simu_nb_rayons([chemin + "lapin/ecarts_150.txt", chemin + "lapin/ecarts_100.txt", chemin + "lapin/ecarts_50.txt", chemin + "slp/ecarts_150.txt", chemin + "slp/ecarts_100.txt", chemin + "slp/ecarts_50.txt"],
-                    ["lapin 150x150", "lapin 100x100", "lapin 50x50", "slp 150x150", "slp 100x100", "slp 50x50"],
-                    [150*150, 100*100, 50*50, 150*150, 100*100, 50*50])
+                    ["lapin 150x150", "lapin 100x100", "lapin 50x50", "slp 150x150", "slp 100x100", "slp 50x50"])
