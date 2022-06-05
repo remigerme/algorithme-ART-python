@@ -73,6 +73,48 @@ def plot_simu_schema_acces(fichiers):
     plt.show()
 
 
+def plot_simu_vitesse_cv_schema_acces(fichiers, labels):
+    # Initialisation
+    fig, (ax1, ax2) = plt.subplots(2, 1)
+    
+    couleurs = ["#8C3C12", "#CF4D18", "#FF541D", "#124295", "#1A5FD8", "#1DADFF"]
+    if len(fichiers) > 2 * len(couleurs):
+        raise Exception("Pas assez de couleurs")
+
+    for (i, fichier) in enumerate(fichiers):
+        with open(fichier, "r") as f:
+            s = f.read()
+        re_data = re.compile("(?P<n_iter>[0-9]+): moyen : (?P<moy>0\.[0-9]+) - norme euclidienne : (?P<euc>[0-9]+\.[0-9]+) - rayons : (?P<nb_rayons>[0-9]+) - alea : (?P<alea>alea|succ)")
+        absc_alea, absc_succ = [], []
+        ords_moy_alea, ords_euc_alea = [], []
+        ords_moy_succ, ords_euc_succ = [], []
+        for m in re_data.finditer(s):
+            if m.group("alea") == "alea":
+                absc_alea.append(int(m.group("n_iter")) / int(m.group("nb_rayons")))
+                ords_moy_alea.append(float(m.group("moy")))
+                ords_euc_alea.append(float(m.group("euc")))
+            else:
+                absc_succ.append(int(m.group("n_iter")) / int(m.group("nb_rayons")))
+                ords_moy_succ.append(float(m.group("moy")))
+                ords_euc_succ.append(float(m.group("euc")))
+
+        ax1.plot(absc_alea, ords_moy_alea, color=couleurs[2 * i], label=labels[2 * i])
+        ax2.plot(absc_alea, ords_euc_alea, color=couleurs[2 * i], label=labels[2 * i])
+        ax1.plot(absc_succ, ords_moy_succ, color=couleurs[2 * i + 1], label=labels[2 * i + 1])
+        ax2.plot(absc_succ, ords_euc_succ, color=couleurs[2 * i + 1], label=labels[2 * i + 1])
+
+    # Légende
+    fig.suptitle("Écart à l'image cible suivant le nombre d'itérations effectuées\n80*80 rayons, initialisation noire, 200x200px", fontsize = 16)
+    ax1.set_ylabel("Écart moyen", fontsize = 14)
+    ax2.set_ylabel("Écart en norme euclidienne", fontsize = 14)
+    ax1.set_xlabel("Nombre de cycles", fontsize = 14)
+    ax2.set_xlabel("Nombre de cycles", fontsize = 14)
+    ax1.set_xlim(right = 50)
+    ax2.set_xlim(right = 50)
+    plt.legend(fontsize = 12)
+    plt.show()
+
+
 def plot_simu_nb_rayons(fichiers, labels, tailles):
     # Initialisation
     fig, (ax1, ax2) = plt.subplots(2, 1)
@@ -107,7 +149,7 @@ def plot_simu_nb_rayons(fichiers, labels, tailles):
     plt.show()
 
 
-def plot_simu_nb_rayons(fichiers, labels):
+def plot_simu_nb_iterations(fichiers, labels):
     # Initialisation
     fig, (ax1, ax2) = plt.subplots(2, 1)
     
@@ -140,6 +182,5 @@ def plot_simu_nb_rayons(fichiers, labels):
     plt.legend(fontsize = 12)
     plt.show()
 
-chemin = "simulations/varier_iterations/"
-plot_simu_nb_rayons([chemin + "lapin/ecarts_150.txt", chemin + "lapin/ecarts_100.txt", chemin + "lapin/ecarts_50.txt", chemin + "slp/ecarts_150.txt", chemin + "slp/ecarts_100.txt", chemin + "slp/ecarts_50.txt"],
-                    ["lapin 150x150", "lapin 100x100", "lapin 50x50", "slp 150x150", "slp 100x100", "slp 50x50"])
+chemin = "simulations/varier_vitesse_cv_schema_acces/"
+plot_simu_vitesse_cv_schema_acces([chemin + "lapin/ecarts_200.txt", chemin + "slp/ecarts_200.txt"], ["lapin 200x200 aléatoire", "lapin 200x200 successif", "slp 200x200 aléatoire", "slp 200x200 successif"])
