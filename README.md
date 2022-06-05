@@ -18,7 +18,7 @@ Initialiser l'algorithme avec une image approchée de ce que l'on attend permet 
 ### Schéma d'accès des rayons
 Le schéma d'accès des rayons est l'ordre dans lequel on considère les rayons. J'ai exploré deux options : soit on prend les rayons successivement dans l'ordre dans lequel ils ont été tracés, soit on les prend aléatoirement.
 
-Ce facteur semble n'avoir aucune influence.
+La première simulation, `simu_schema_acces` étudie le comportement asymptotique, après un grand nombre d'itérations de l'algorithme. La deuxième simulation, `simu_vitesse_cv_schema_acces` étudie l'influence du nombre d'itérations en fonction du schéma d'accès : le schéma aléatoire est théoriquement censé converger plus vite que le schéma successif, mais l'on n'observe pas ce phénomène ici.
 
 ### Nombre d'itérations
 Il semble qu'itérer l'algorithme continue d'améliorer la précision de l'image reconstituée, même après un grand nombre de cycles réalisés (un cycle = `N_R` itérations de l'algorithme, où `N_R` est le nombre de rayons tracés). Il semblerait qu'il soit très rentable de réaliser au moins 40 cycles.
