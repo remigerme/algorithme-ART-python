@@ -20,9 +20,9 @@ def varier_iterations(f0, A, R, N_ITER, sauvegarder_k, aleatoire, cst, chemin):
         N_P = cst.L * cst.H # nombre de pixels
         # Les vecteurs normaux aux hyperplans sont les (lignes) A[j]
         # Il est pratique de les rendre unitaires
-        # On calcule la norme 1 de chaque ligne
+        # On calcule la norme 2 de chaque ligne
         N = zeros((N_R, N_P))
-        normes = norm(A, ord = 1, axis = 1)
+        normes = norm(A, ord = 2, axis = 1)
         for j in range(N_R):
             N[j] = A[j] / normes[j]
         
@@ -35,13 +35,18 @@ def varier_iterations(f0, A, R, N_ITER, sauvegarder_k, aleatoire, cst, chemin):
             h = zeros(N_P)
             h[i0] = R[j]
             T[j] = vdot(h, N[j]) * N[j]
+        
+        # Pour le choix aléatoire optimisé des rayons
+        norme_A = norm(A)
+        P = [(normes[j] / norme_A) ** 2 for j in range(N_R)]
+        les_rayons = list(range(0, N_R))
 
         # Initialisation
         f = f0
         j = 0
         for k in range(1, N_ITER + 1):
             f = f - vdot(f, N[j]) * N[j] + T[j]
-            j = prochain_rayon(j, N_R, aleatoire)
+            j = prochain_rayon(j, N_R, aleatoire, P, les_rayons)
             if sauvegarder_k(k):
                 enregistrer_image(f, cst.L, cst.H, fichier + "_{}.png".format(k))
         tronquer(f)
@@ -53,7 +58,7 @@ def varier_iterations(f0, A, R, N_ITER, sauvegarder_k, aleatoire, cst, chemin):
 
 def simu_iterations(alpha = 0.2):
     # Paramètres
-    I, L, H = image_depuis_fichier("exemples/slp/slp_50.png")
+    I, L, H = image_depuis_fichier("exemples/lapin/lapin_50.png")
     # D'après les courbes du nombre de rayons
     # On prend N_THETA = N_RHO tels que
     # N_THETA * N_RHO = alpha * L * H
@@ -61,7 +66,7 @@ def simu_iterations(alpha = 0.2):
     N_THETA = int(sqrt(alpha) * L)
     N_RHO = N_THETA
     cst = Donnees(L, H, N_THETA, N_RHO)
-    chemin = "simulations/varier_iterations/slp/"
+    chemin = "simulations/varier_iterations_bis/lapin/"
 
     # Initialisation
     A = tracer_rayons(cst)
@@ -121,5 +126,5 @@ def extraire_stats(fichier_ref, chemin, taille):
 for image in ["slp", "lapin"]:
     for taille in [50, 100, 150, 200]:
         fichier_ref = "exemples/{}/{}_{}.png".format(image, image, taille)
-        chemin = "simulations/varier_iterations/{}/".format(image)
+        chemin = "simulations/varier_iterations_bis/{}/".format(image)
         extraire_stats(fichier_ref, chemin, taille)
