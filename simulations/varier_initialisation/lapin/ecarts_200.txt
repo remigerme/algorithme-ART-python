@@ -1,4 +1,4 @@
-noire: moyen : 0.09366405974172774 - norme euclidienne : 24.662110488382577
-blanche: moyen : 0.11081152596884249 - norme euclidienne : 29.143776769365267
-grise: moyen : 0.09510327614147884 - norme euclidienne : 24.63840008680437
-approchee: moyen : 0.062024425281736975 - norme euclidienne : 17.669898179311776
+noire: moyen : 0.07696199191033648 - norme euclidienne : 20.42095350862543
+blanche: moyen : 0.08924979473108513 - norme euclidienne : 23.58339317306603
+grise: moyen : 0.0770076569093535 - norme euclidienne : 20.225373498270685
+approchee: moyen : 0.05411341694041806 - norme euclidienne : 15.075822896109168
