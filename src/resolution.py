@@ -40,12 +40,7 @@ def ART(f0, A, R, N_ITER, aleatoire, cst):
     # On calcule aussi les projections orthogonales de 0 sur les hyperplans
     T = zeros((N_R, N_P))
     for j in range(N_R):
-        # On prend h une solution particulière de A[j]h = R[j]
-        # Pour ça on prend un coefficient non nul de A[j]
-        i0 = where(A[j] > 1e-5)[0][0]
-        h = zeros(N_P)
-        h[i0] = R[j]
-        T[j] = vdot(h, N[j]) * N[j]
+        T[j] = R[j] / normes[j] * N[j]
 
     # Initialisation
     f = f0
